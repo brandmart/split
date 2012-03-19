@@ -73,4 +73,20 @@ describe Split::Dashboard do
 
     last_response.body.should include('<small>Unknown</small>')
   end
+
+  it "should add alternatives" do
+    experiment = Split::Experiment.find_or_create('link_color', 'blue', 'red')
+
+    post '/alternatives/link_color', :alternative => 'green'
+
+    Split::Experiment.find('link_color').alternatives.map(&:name).should include('green')
+  end
+
+  it "should remove alternatives" do
+    experiment = Split::Experiment.find_or_create('link_color', 'blue', 'red', 'green')
+
+    delete '/alternatives/link_color', :alternative => 'red'
+
+    Split::Experiment.find('link_color').alternatives.map(&:name).should_not include('red')
+  end
 end

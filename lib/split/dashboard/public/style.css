@@ -233,6 +233,16 @@ body {
   margin-left: 10px;
 }
 
+#add-alternative {
+  display:none;
+}
+#add-alternative input[type='text'] {
+  width: 600px;
+}
+#add-alternative.show {
+  display:block;
+}
+
 .worse, .better {
   color: #773F3F;
   font-size: 10px;

@@ -19,6 +19,16 @@ module Split
       erb :index
     end
 
+    post '/alternatives/:experiment' do
+      experiment = Split::Experiment.find(params[:experiment])
+      new_alternatives = experiment.alternatives.map(&:name) + [params[:alternative]]
+
+      experiment.delete
+      @experiment = Split::Experiment.find_or_create(params[:experiment], *new_alternatives)
+
+      redirect url('/')
+    end
+
     post '/:experiment' do
       @experiment = Split::Experiment.find(params[:experiment])
       @alternative = Split::Alternative.new(params[:alternative], params[:experiment])
@@ -29,6 +39,16 @@ module Split
     post '/reset/:experiment' do
       @experiment = Split::Experiment.find(params[:experiment])
       @experiment.reset
+      redirect url('/')
+    end
+
+    delete '/alternatives/:experiment' do
+      experiment = Split::Experiment.find(params[:experiment])
+      new_alternatives = experiment.alternatives.map(&:name) - [params[:alternative]]
+
+      experiment.delete
+      @experiment = Split::Experiment.find_or_create(params[:experiment], *new_alternatives)
+
       redirect url('/')
     end
 

@@ -7,12 +7,21 @@
 
     <div class='inline-controls'>
       <small><%= experiment.start_time ? experiment.start_time.strftime('%Y-%m-%d') : 'Unknown' %></small>
+      <form action="<%= url "/alternatives/#{experiment.name}" %>" method='get' onclick="return showAdd()">
+        <input type="submit" value="Add Alternative">
+      </form>
       <form action="<%= url "/reset/#{experiment.name}" %>" method='post' onclick="return confirmReset()">
         <input type="submit" value="Reset Data">
       </form>
       <form action="<%= url "/#{experiment.name}" %>" method='post' onclick="return confirmDelete()">
         <input type="hidden" name="_method" value="delete"/>
         <input type="submit" value="Delete" class="red">
+      </form>
+    </div>
+    <div id='add-alternative' class='inline-controls'>
+      <form action="<%= url "/alternatives/#{experiment.name}" %>" method='post'>
+        <input type="text" name="alternative" placeholder="Alternative Name"/>
+        <input type="submit" value="Save" class="green" onclick="return confirmAdd()"/>
       </form>
     </div>
   </div>
@@ -69,6 +78,11 @@
               <input type="submit" value="Use this" class="green">
             </form>
           <% end %>
+            <form action="alternatives/<%= experiment.name %>" method='post' onclick="return confirmDelete()">
+              <input type="hidden" name="_method" value="delete"/>
+              <input type='hidden' name='alternative' value='<%= alternative.name %>'>
+              <input type="submit" value="Delete" class="red">
+            </form>
         </td>
       </tr>
 
