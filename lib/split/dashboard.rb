@@ -46,8 +46,8 @@ module Split
       experiment = Split::Experiment.find(params[:experiment])
       new_alternatives = experiment.alternatives.map(&:name) - [params[:alternative]]
 
-      experiment.delete
       @experiment = Split::Experiment.find_or_create(params[:experiment], *new_alternatives)
+      experiment.delete
 
       redirect url('/')
     end
